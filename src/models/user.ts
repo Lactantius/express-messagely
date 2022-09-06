@@ -2,6 +2,7 @@
 
 import db from "../db";
 import bcrypt from "bcrypt";
+import Message from "./message";
 
 const { SECRET_KEY, BCRYPT_WORK_FACTOR } = require("../config");
 
@@ -99,7 +100,19 @@ class User {
    *   {username, first_name, last_name, phone}
    */
 
-  static async messagesFrom(username: string) {}
+  static async messagesFrom(username: string): Promise<Message[]> {
+    const result = await db.query(
+      `SELECT id, body, sent_at, read_at,
+          json_build_object('first_name', first_name, 'last_name', last_name,
+          'phone', phone, 'username', username) AS to_user
+        FROM messages
+        JOIN users
+        ON users.username = messages.to_username
+        WHERE from_username=$1`,
+      [username]
+    );
+    return result.rows;
+  }
 
   /** Return messages to this user.
    *
