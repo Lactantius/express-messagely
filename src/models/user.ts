@@ -40,7 +40,16 @@ class User {
 
   /** Authenticate: is this username/password valid? Returns boolean. */
 
-  static async authenticate(username: string, password: string) {}
+  static async authenticate(
+    username: string,
+    password: string
+  ): Promise<boolean> {
+    const hashedInDB = await db.query(
+      `SELECT password FROM users WHERE username = $1`,
+      [username]
+    );
+    return bcrypt.compare(password, hashedInDB.rows[0].password);
+  }
 
   /** Update last_login_at for user */
 
