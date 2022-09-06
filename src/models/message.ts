@@ -3,6 +3,12 @@
 import db from "../db";
 const ExpressError = require("../expressError");
 
+interface MessageData {
+  from_username: string;
+  to_username: string;
+  body: string;
+}
+
 /** Message on the site. */
 
 class Message {
@@ -14,7 +20,7 @@ class Message {
     from_username,
     to_username,
     body,
-  }) {
+  }: MessageData) {
     const result = await db.query(
       `INSERT INTO messages (
               from_username,
@@ -31,7 +37,7 @@ class Message {
 
   /** Update read_at for message */
 
-  static async markRead(id) {
+  static async markRead(id: number) {
     const result = await db.query(
       `UPDATE messages
            SET read_at = current_timestamp
@@ -55,7 +61,7 @@ class Message {
    *
    */
 
-  static async get(id) {
+  static async get(id: number) {
     const result = await db.query(
       `SELECT m.id,
                 m.from_username,

@@ -28,18 +28,19 @@ class User {
     phone,
   }: UserData): Promise<UserData> {
     const hashed = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
+    const joinAt = new Date();
     const result = await db.query(
-      `INSERT INTO users (username, password, first_name, last_name, phone)
-        VALUES ($1, $2, $3, $4, $5)
+      `INSERT INTO users (username, password, first_name, last_name, phone, join_at)
+        VALUES ($1, $2, $3, $4, $5, $6)
         RETURNING username, password, first_name, last_name, phone`,
-      [username, hashed, first_name, last_name, phone]
+      [username, hashed, first_name, last_name, phone, joinAt]
     );
     return result.rows[0];
   }
 
   /** Authenticate: is this username/password valid? Returns boolean. */
 
-  static async authenticate(username: string, password) {}
+  static async authenticate(username: string, password: string) {}
 
   /** Update last_login_at for user */
 
