@@ -1,7 +1,6 @@
 import db from "../src/db";
 const User = require("../src/models/user");
 import Message from "../src/models/message";
-//const Message = require("../src/models/message");
 
 describe("Test User class", function () {
   beforeEach(async function () {
