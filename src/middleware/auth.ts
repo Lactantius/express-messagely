@@ -1,6 +1,6 @@
 /** Middleware for handling req authorization for routes. */
 
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
 const { SECRET_KEY } = require("../config");
 
 /** Middleware: Authenticate user. */
