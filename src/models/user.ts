@@ -64,7 +64,13 @@ class User {
   /** All: basic info on all users:
    * [{username, first_name, last_name, phone}, ...] */
 
-  static async all() {}
+  static async all(): Promise<User[]> {
+    const result = await db.query(
+      `SELECT username, first_name, last_name, phone
+        FROM users`
+    );
+    return result.rows;
+  }
 
   /** Get: get user by username
    *
@@ -75,7 +81,7 @@ class User {
    *          join_at,
    *          last_login_at } */
 
-  static async get(username: string) {
+  static async get(username: string): Promise<User> {
     const result = await db.query(
       `SELECT username, first_name, last_name, phone, join_at, last_login_at
         FROM users
