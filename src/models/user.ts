@@ -122,7 +122,19 @@ class User {
    *   {username, first_name, last_name, phone}
    */
 
-  static async messagesTo(username: string) {}
+  static async messagesTo(username: string): Promise<Message[]> {
+    const result = await db.query(
+      `SELECT id, body, sent_at, read_at,
+          json_build_object('first_name', first_name, 'last_name', last_name,
+          'phone', phone, 'username', username) AS from_user
+        FROM messages
+        JOIN users
+        ON users.username = messages.from_username
+        WHERE to_username=$1`,
+      [username]
+    );
+    return result.rows;
+  }
 }
 
 module.exports = User;
