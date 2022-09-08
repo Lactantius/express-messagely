@@ -1,7 +1,12 @@
 import { Router } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+
 import db from "../db";
+const { ensureLoggedIn, ensureCorrectUser } = require("../middleware/auth");
+const User = require("../models/user");
+import Message from "../models/message";
+//const Message = require("../models/message");
 
 const router = Router();
 
@@ -24,6 +29,21 @@ const router = Router();
  *   {message: {id, from_username, to_username, body, sent_at}}
  *
  **/
+
+router.post("/", ensureLoggedIn, async (req, res, next) => {
+  try {
+    const { to_username, body } = req.body;
+    const { username } = req.user;
+    const message = await Message.create({
+      from_username: username,
+      to_username,
+      body,
+    });
+    return res.json({ message: message });
+  } catch (err) {
+    return next(err);
+  }
+});
 
 /** POST/:id/read - mark message as read:
  *
