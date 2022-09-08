@@ -28,7 +28,11 @@ function ensureLoggedIn(req: any, res: any, next: NextFunction) {
   }
 }
 
-/** Middleware: Requires correct username. */
+/**
+ * Middleware: Requires correct username.
+ *
+ * Not sure this is standard, since it requires a JSON body in a GET request for some routes
+ * */
 
 function ensureCorrectUser(req: any, res: any, next: NextFunction) {
   try {
