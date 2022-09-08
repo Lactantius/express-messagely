@@ -19,9 +19,12 @@ app.use(authenticateJWT);
 
 /** routes */
 
-const authRoutes = require("./routes/auth");
-const userRoutes = require("./routes/users");
-const messageRoutes = require("./routes/messages");
+//const authRoutes = require("./routes/auth");
+//const userRoutes = require("./routes/users");
+//const messageRoutes = require("./routes/messages");
+import authRoutes from "./routes/auth";
+import userRoutes from "./routes/users";
+import messageRoutes from "./routes/messages";
 
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);

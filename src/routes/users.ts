@@ -1,16 +1,21 @@
+import { Router } from "express";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import db from "../db";
+
+const router = Router();
+
 /** GET / - get list of users.
  *
  * => {users: [{username, first_name, last_name, phone}, ...]}
  *
  **/
 
-
 /** GET /:username - get detail of users.
  *
  * => {user: {username, first_name, last_name, phone, join_at, last_login_at}}
  *
  **/
-
 
 /** GET /:username/to - get messages to user
  *
@@ -22,7 +27,6 @@
  *
  **/
 
-
 /** GET /:username/from - get messages from user
  *
  * => {messages: [{id,
@@ -32,3 +36,5 @@
  *                 to_user: {username, first_name, last_name, phone}}, ...]}
  *
  **/
+
+export default router;
