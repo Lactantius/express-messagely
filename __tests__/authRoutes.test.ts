@@ -1,8 +1,8 @@
-const request = require("supertest");
+import request from "supertest";
 const jwt = require("jsonwebtoken");
 
-const app = require("../src/app");
-const db = require("../src/db");
+import app from "../src/app";
+import db from "../src/db";
 const User = require("../src/models/user");
 
 describe("Auth Routes Test", function () {
