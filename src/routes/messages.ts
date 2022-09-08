@@ -23,7 +23,7 @@ const router = Router();
  *
  **/
 
-router.post("/:id", ensureLoggedIn, async (req, res, next) => {
+router.get("/:id", ensureLoggedIn, async (req, res, next) => {
   try {
     const id = Number(req.params.id);
     const message = await Message.get(id);
@@ -47,7 +47,7 @@ router.post("/:id", ensureLoggedIn, async (req, res, next) => {
  *
  **/
 
-router.get("/", ensureLoggedIn, async (req, res, next) => {
+router.post("/", ensureLoggedIn, async (req, res, next) => {
   try {
     const { to_username, body } = req.body;
     const { username } = req.user;
@@ -69,5 +69,20 @@ router.get("/", ensureLoggedIn, async (req, res, next) => {
  * Make sure that the only the intended recipient can mark as read.
  *
  **/
+
+router.post("/:id/read", ensureLoggedIn, async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    const message = await Message.get(id);
+    const { username } = req.user;
+    if (username !== message.to_user.username) {
+      return next({ status: 401, message: "Unauthorized" });
+    }
+    const read = await Message.markRead(id);
+    return res.json({ message: read });
+  } catch (err) {
+    return next(err);
+  }
+});
 
 export default router;
