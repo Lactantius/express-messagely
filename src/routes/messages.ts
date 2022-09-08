@@ -23,6 +23,23 @@ const router = Router();
  *
  **/
 
+router.post("/:id", ensureLoggedIn, async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    const message = await Message.get(id);
+    const { username } = req.user;
+    if (
+      username !== message.to_user.username &&
+      username !== message.from_user.username
+    ) {
+      return next({ status: 401, message: "Unauthorized" });
+    }
+    return res.json({ message: message });
+  } catch (err) {
+    return next(err);
+  }
+});
+
 /** POST / - post message.
  *
  * {to_username, body} =>
@@ -30,7 +47,7 @@ const router = Router();
  *
  **/
 
-router.post("/", ensureLoggedIn, async (req, res, next) => {
+router.get("/", ensureLoggedIn, async (req, res, next) => {
   try {
     const { to_username, body } = req.body;
     const { username } = req.user;
