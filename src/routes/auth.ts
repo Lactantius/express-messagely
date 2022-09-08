@@ -1,7 +1,11 @@
 import { Router } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+
 import db from "../db";
+const User = require("../models/user");
+const { SECRET_KEY } = require("../config");
+
 
 const router = Router();
 
@@ -38,5 +42,15 @@ router.post("/login", async (req, res, next) => {
  *
  *  Make sure to update their last-login!
  */
+
+router.post("/register", async (req, res, next) => {
+  try {
+    const user = User.register(req.body);
+    const token = jwt.sign({ username: user.username }, SECRET_KEY);
+    return res.json({ token });
+  } catch (err) {
+    return next(err);
+  }
+});
 
 export default router;
