@@ -2,6 +2,9 @@ import { Router } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import db from "../db";
+const ExpressError = require("../expressError");
+const { ensureLoggedIn, ensureCorrectUser } = require("../middleware/auth");
+const User = require("../models/user");
 
 const router = Router();
 
@@ -10,6 +13,15 @@ const router = Router();
  * => {users: [{username, first_name, last_name, phone}, ...]}
  *
  **/
+
+router.get("/", ensureLoggedIn, async (req, res, next) => {
+  try {
+    const users = await User.all();
+    return res.json(users);
+  } catch (err) {
+    return next(err);
+  }
+});
 
 /** GET /:username - get detail of users.
  *
