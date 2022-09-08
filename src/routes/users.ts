@@ -49,6 +49,16 @@ router.get("/:username", ensureCorrectUser, async (req, res, next) => {
  *
  **/
 
+router.get("/:username/to", ensureCorrectUser, async (req, res, next) => {
+  try {
+    const username = String(req.params.username);
+    const messages = await User.messagesTo(username);
+    return res.json(messages);
+  } catch (err) {
+    return next(err);
+  }
+});
+
 /** GET /:username/from - get messages from user
  *
  * => {messages: [{id,
@@ -58,5 +68,15 @@ router.get("/:username", ensureCorrectUser, async (req, res, next) => {
  *                 to_user: {username, first_name, last_name, phone}}, ...]}
  *
  **/
+
+router.get("/:username/from", ensureCorrectUser, async (req, res, next) => {
+  try {
+    const username = String(req.params.username);
+    const messages = await User.messagesFrom(username);
+    return res.json(messages);
+  } catch (err) {
+    return next(err);
+  }
+});
 
 export default router;
