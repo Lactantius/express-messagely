@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import db from "../db";
 const User = require("../models/user");
 const { SECRET_KEY } = require("../config");
-
+const ExpressError = require("../expressError");
 
 const router = Router();
 
@@ -21,8 +21,8 @@ router.post("/login", async (req, res, next) => {
     const result = await db.query(
       `SELECT password FROM users WHERE username=$1`,
       [username]
-    )
-    const user = result.rows[0]
+    );
+    const user = result.rows[0];
     if (user) {
       if (await bcrypt.compare(password, user.password)) {
         const token = jwt.sign({ username }, SECRET_KEY);
@@ -33,8 +33,7 @@ router.post("/login", async (req, res, next) => {
   } catch (err) {
     return next(err);
   }
-})
-
+});
 
 /** POST /register - register user: registers, logs in, and returns token.
  *
